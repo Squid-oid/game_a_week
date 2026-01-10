@@ -1,0 +1,150 @@
+[gd_scene load_steps=17 format=3 uid="uid://beoxeorr4vq38"]
+
+[ext_resource type="Script" uid="uid://c6sylyirvpbps" path="res://back_wheel.gd" id="1_onrkg"]
+[ext_resource type="Script" uid="uid://dafq50dn6gmsn" path="res://front_wheel.gd" id="2_i3pqv"]
+[ext_resource type="Script" uid="uid://bv8n5ykwo6md3" path="res://frame_object.gd" id="2_sweqy"]
+[ext_resource type="Script" uid="uid://mc0r1mambnrf" path="res://back_wheel_rim.gd" id="3_i3pqv"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_i3pqv"]
+
+[sub_resource type="Skin" id="Skin_hqtel"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sweqy"]
+size = Vector3(1.0475159, 1, 0.079778805)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_hqtel"]
+rough = true
+
+[sub_resource type="Gradient" id="Gradient_i3pqv"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_hqtel"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_sweqy"]
+width = 72
+height = 1
+noise = SubResource("FastNoiseLite_hqtel")
+color_ramp = SubResource("Gradient_i3pqv")
+invert = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2hs0m"]
+albedo_color = Color(0.36078432, 1, 1, 1)
+albedo_texture = SubResource("NoiseTexture2D_sweqy")
+albedo_texture_force_srgb = true
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_i3pqv"]
+material = SubResource("StandardMaterial3D_2hs0m")
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_4flbx"]
+height = 0.0838379
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_onrkg"]
+height = 0.19306642
+radius = 0.3
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_i3pqv"]
+friction = 0.6
+rough = true
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+
+[node name="Frame" type="Node3D" parent="."]
+
+[node name="FrameObject" type="RigidBody3D" parent="Frame"]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("2_sweqy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Frame/FrameObject"]
+transform = Transform3D(2.6205177, -0.0786364, 0, 0.23890081, 0.8625675, 0, 0, 0, 0.15479225, -1.0843809, 0.38525236, 0)
+mesh = SubResource("BoxMesh_i3pqv")
+skin = SubResource("Skin_hqtel")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Frame/FrameObject"]
+transform = Transform3D(0.9956225, -0.09346539, 0, 0.09346539, 0.9956225, 0, 0, 0, 1, -1.0244853, 0.36468744, 0.011269785)
+shape = SubResource("BoxShape3D_sweqy")
+
+[node name="FrontWheelPivot" type="Node3D" parent="Frame"]
+transform = Transform3D(1, 0, 0, 0, 0.99999976, 4.2351647e-22, 0, 0, 0.99999976, -0.36753082, 0.69355506, 0)
+
+[node name="FrontWheelHub" type="RigidBody3D" parent="Frame/FrontWheelPivot"]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, -3.552715e-15, 0, 0, 1.0000001, 0.36753082, -0.69355524, 0)
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("2_i3pqv")
+max_steering_angle = null
+steering_speed = null
+wheel_radius = null
+
+[node name="FrontWheelRim" type="RigidBody3D" parent="Frame/FrontWheelPivot/FrontWheelHub"]
+collision_layer = 2
+collision_mask = 5
+physics_material_override = SubResource("PhysicsMaterial_hqtel")
+
+[node name="HingeJoint3D" type="HingeJoint3D" parent="Frame/FrontWheelPivot/FrontWheelHub/FrontWheelRim"]
+node_a = NodePath("../..")
+node_b = NodePath("..")
+params/bias = 0.99
+angular_limit/bias = 0.99
+
+[node name="FrontWheelMesh" type="MeshInstance3D" parent="Frame/FrontWheelPivot/FrontWheelHub/FrontWheelRim"]
+transform = Transform3D(1, 0, 0, 0, 2.725893e-09, 0.99999994, 0, 0.06236116, -4.3711385e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_i3pqv")
+skeleton = NodePath("")
+
+[node name="FrontWheelColl" type="CollisionShape3D" parent="Frame/FrontWheelPivot/FrontWheelHub/FrontWheelRim"]
+transform = Transform3D(1, 0, 0, 0, 3.5527145e-15, -1.0000001, 0, 1.0000001, 0, 0, -1.8171226e-16, -0.051147453)
+shape = SubResource("CylinderShape3D_4flbx")
+
+[node name="hubcoll" type="CollisionShape3D" parent="Frame/FrontWheelPivot/FrontWheelHub"]
+transform = Transform3D(1, 0, 0, 0, 3.5527145e-15, -1.0000001, 0, 1.0000001, 0, 0, 1.2316602e-17, 0.0034668148)
+shape = SubResource("CylinderShape3D_onrkg")
+
+[node name="FrontSteerJoint" type="Generic6DOFJoint3D" parent="Frame/FrontWheelPivot/FrontWheelHub"]
+transform = Transform3D(0.92603534, -0.37743676, 0, 0.37743673, 0.9260352, 3.552714e-15, 0, 0, 0.9999999, -0.36753082, 0.6935551, 0)
+node_a = NodePath("../../../FrameObject")
+node_b = NodePath("..")
+angular_limit_y/upper_angle = 0.010471975
+angular_limit_y/lower_angle = -0.010471975
+angular_motor_y/enabled = true
+angular_motor_y/force_limit = 75.0
+
+[node name="BackWheelHead" type="Node3D" parent="Frame"]
+
+[node name="BackWheel" type="RigidBody3D" parent="Frame/BackWheelHead"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_onrkg")
+
+[node name="HingeJoint3D" type="HingeJoint3D" parent="Frame/BackWheelHead/BackWheel"]
+node_a = NodePath("..")
+node_b = NodePath("../BackWheelRim")
+motor/target_velocity = 0.0
+
+[node name="BackWheelRim" type="RigidBody3D" parent="Frame/BackWheelHead/BackWheel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+collision_layer = 2
+collision_mask = 5
+physics_material_override = SubResource("PhysicsMaterial_i3pqv")
+script = ExtResource("3_i3pqv")
+
+[node name="BackWheelMesh" type="MeshInstance3D" parent="Frame/BackWheelHead/BackWheel/BackWheelRim"]
+transform = Transform3D(1, 0, 0, 0, 2.1699706e-09, 0.9999999, 0, 0.049643144, -4.371138e-08, -2, 0, 0)
+mesh = SubResource("CylinderMesh_i3pqv")
+skeleton = NodePath("")
+
+[node name="BackWheelColl" type="CollisionShape3D" parent="Frame/BackWheelHead/BackWheel/BackWheelRim"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -2, 8.271806e-25, 0.0034668145)
+shape = SubResource("CylinderShape3D_4flbx")
+
+[node name="hubcoll" type="CollisionShape3D" parent="Frame/BackWheelHead/BackWheel"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 8.271806e-25, 0.0034668145)
+shape = SubResource("CylinderShape3D_onrkg")
+
+[node name="FrontWheelJoint" type="Generic6DOFJoint3D" parent="."]
+node_a = NodePath("../Frame/FrameObject")
+node_b = NodePath("../Frame/FrontWheelPivot/FrontWheelHub")
+
+[node name="BackWheelJoint" type="Generic6DOFJoint3D" parent="."]
+node_a = NodePath("../Frame/FrameObject")
+node_b = NodePath("../Frame/BackWheelHead/BackWheel")

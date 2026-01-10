@@ -1,0 +1,50 @@
+[gd_scene load_steps=7 format=3 uid="uid://beoxeorr4vq38"]
+
+[ext_resource type="Script" uid="uid://co3w6ay5bp5pc" path="res://character_body_3d.gd" id="1_onrkg"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_hqtel"]
+custom_solver_bias = 0.01
+height = 0.08886719
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_onrkg"]
+albedo_color = Color(0.39607844, 1, 1, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_onrkg"]
+material = SubResource("StandardMaterial3D_onrkg")
+height = 0.075
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_onrkg"]
+size = Vector3(60, 2, 60)
+
+[sub_resource type="BoxMesh" id="BoxMesh_i3pqv"]
+size = Vector3(60, 2, 60)
+
+[node name="Player" type="Node"]
+
+[node name="Bike" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6990006, 0)
+script = ExtResource("1_onrkg")
+
+[node name="FrontWheelPivot" type="Node3D" parent="Bike"]
+
+[node name="FrontWheel" type="CollisionShape3D" parent="Bike/FrontWheelPivot"]
+process_mode = 3
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.86532736, -0.044433594)
+shape = SubResource("CylinderShape3D_hqtel")
+
+[node name="FrontWheelMesh" type="MeshInstance3D" parent="Bike/FrontWheelPivot"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.86532736, -0.044433594)
+mesh = SubResource("CylinderMesh_onrkg")
+skeleton = NodePath("../FrontWheel")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.969089, 0, -0.24671148, 0, 1, 0, 0.24671148, 0, -0.969089, 0, 1.9856466, -1.422401)
+fov = 93.318634
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_onrkg")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_i3pqv")

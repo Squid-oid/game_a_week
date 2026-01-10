@@ -1,0 +1,90 @@
+[gd_scene load_steps=11 format=3 uid="uid://beoxeorr4vq38"]
+
+[ext_resource type="Script" uid="uid://c6sylyirvpbps" path="res://back_wheel.gd" id="1_onrkg"]
+[ext_resource type="Script" uid="uid://dafq50dn6gmsn" path="res://front_wheel.gd" id="2_i3pqv"]
+[ext_resource type="Script" uid="uid://mc0r1mambnrf" path="res://back_wheel_rim.gd" id="3_i3pqv"]
+
+[sub_resource type="Gradient" id="Gradient_i3pqv"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_hqtel"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_sweqy"]
+width = 72
+height = 1
+noise = SubResource("FastNoiseLite_hqtel")
+color_ramp = SubResource("Gradient_i3pqv")
+invert = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2hs0m"]
+albedo_color = Color(0.36078432, 1, 1, 1)
+albedo_texture = SubResource("NoiseTexture2D_sweqy")
+albedo_texture_force_srgb = true
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_i3pqv"]
+material = SubResource("StandardMaterial3D_2hs0m")
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_4flbx"]
+height = 0.19306642
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_onrkg"]
+height = 0.19306642
+radius = 0.3
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+
+[node name="FrontWheelPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.99999976, 4.2351647e-22, 0, 0, 0.99999976, -0.36753082, 0.69355506, 0)
+
+[node name="FrontWheelHub" type="RigidBody3D" parent="FrontWheelPivot"]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, -3.552715e-15, 0, 0, 1.0000001, 0.36753082, -0.69355524, 0)
+script = ExtResource("2_i3pqv")
+
+[node name="FrontWheelSpin" type="PinJoint3D" parent="FrontWheelPivot/FrontWheelHub"]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 3.5527145e-15, 0, 0, 1.0000001, 0, 0, 0)
+node_a = NodePath("..")
+node_b = NodePath("../FrontWheelRim")
+params/damping = 0.55
+
+[node name="FrontWheelRim" type="RigidBody3D" parent="FrontWheelPivot/FrontWheelHub"]
+
+[node name="FrontWheelMesh" type="MeshInstance3D" parent="FrontWheelPivot/FrontWheelHub/FrontWheelRim"]
+transform = Transform3D(1, 0, 0, 0, 4.3711403e-09, 0.99999994, 0, 0.100000024, -4.3711385e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_i3pqv")
+skeleton = NodePath("")
+
+[node name="FrontWheelColl" type="CollisionShape3D" parent="FrontWheelPivot/FrontWheelHub/FrontWheelRim"]
+transform = Transform3D(1, 0, 0, 0, 3.5527145e-15, -1.0000001, 0, 1.0000001, 0, 0, 1.2316602e-17, 0.0034668148)
+shape = SubResource("CylinderShape3D_4flbx")
+
+[node name="hubcoll" type="CollisionShape3D" parent="FrontWheelPivot/FrontWheelHub"]
+transform = Transform3D(1, 0, 0, 0, 3.5527145e-15, -1.0000001, 0, 1.0000001, 0, 0, 1.2316602e-17, 0.0034668148)
+shape = SubResource("CylinderShape3D_onrkg")
+
+[node name="BackWheel" type="Node3D" parent="."]
+
+[node name="BackWheel" type="RigidBody3D" parent="BackWheel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+script = ExtResource("1_onrkg")
+
+[node name="BackWheelSpin" type="PinJoint3D" parent="BackWheel/BackWheel"]
+node_a = NodePath("..")
+node_b = NodePath("../BackWheelRim")
+params/damping = 0.42
+
+[node name="BackWheelRim" type="RigidBody3D" parent="BackWheel/BackWheel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+script = ExtResource("3_i3pqv")
+force_scale = null
+
+[node name="BackWheelMesh" type="MeshInstance3D" parent="BackWheel/BackWheel/BackWheelRim"]
+transform = Transform3D(1, 0, 0, 0, 4.3711395e-09, 0.9999999, 0, 0.10000002, -4.371138e-08, -2, 0, 0)
+mesh = SubResource("CylinderMesh_i3pqv")
+skeleton = NodePath("")
+
+[node name="BackWheelColl" type="CollisionShape3D" parent="BackWheel/BackWheel/BackWheelRim"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, -2, 8.271806e-25, 0.0034668145)
+shape = SubResource("CylinderShape3D_4flbx")
+
+[node name="hubcoll" type="CollisionShape3D" parent="BackWheel/BackWheel"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 8.271806e-25, 0.0034668145)
+shape = SubResource("CylinderShape3D_onrkg")
