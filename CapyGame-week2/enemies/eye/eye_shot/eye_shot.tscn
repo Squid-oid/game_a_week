@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://ckbir8jflpqsg"]
+
+[ext_resource type="Script" uid="uid://crgriaelax6lh" path="res://enemies/eye/eye_shot/eye_shot.gd" id="1_hnire"]
+[ext_resource type="Texture2D" uid="uid://dql25cugu7fsy" path="res://assets/enemies/eye_shot.png" id="1_rymbv"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sw8go"]
+radius = 3.0
+
+[node name="Eye_shot" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_hnire")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_rymbv")
+
+[node name="HurtBox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+shape = SubResource("CircleShape2D_sw8go")
+
+[connection signal="area_entered" from="HurtBox" to="." method="hurt"]

@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://csx0g2ls2to3t"]
+
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://assets/icon.svg" id="1_4aola"]
+[ext_resource type="Script" uid="uid://d2bk4n7we03nf" path="res://enemies/box.gd" id="1_gpyqy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gpyqy"]
+size = Vector2(128, 127)
+
+[node name="Box" type="CharacterBody2D"]
+script = ExtResource("1_gpyqy")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_gpyqy")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_4aola")

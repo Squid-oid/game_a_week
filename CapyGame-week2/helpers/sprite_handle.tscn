@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bs7dlle34x0dv"]
+
+[ext_resource type="Script" uid="uid://ck7si71yuaqjj" path="res://helpers/sprite_handle.gd" id="1_mxipb"]
+
+[node name="sprite_handle" type="Node2D"]
+script = ExtResource("1_mxipb")

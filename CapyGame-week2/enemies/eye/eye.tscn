@@ -1,0 +1,52 @@
+[gd_scene load_steps=10 format=3 uid="uid://dpo8ov6574pjm"]
+
+[ext_resource type="Script" uid="uid://k8s8n0aoigng" path="res://enemies/eye/eye.gd" id="1_ah3cm"]
+[ext_resource type="Texture2D" uid="uid://rtm1w71cmn2x" path="res://assets/enemies/eye.png" id="1_kyxgt"]
+[ext_resource type="Script" uid="uid://ck7si71yuaqjj" path="res://helpers/sprite_handle.gd" id="2_ayjj1"]
+[ext_resource type="Script" uid="uid://da3d22aq8pbm5" path="res://enemies/enemy_state_machine.gd" id="4_emk32"]
+[ext_resource type="Script" uid="uid://dtwmtu2vtyxi0" path="res://enemies/eye/states/idle.gd" id="5_qp5oa"]
+[ext_resource type="Script" uid="uid://dmp1pkva4k4si" path="res://enemies/eye/states/follow.gd" id="6_vnqpf"]
+[ext_resource type="PackedScene" uid="uid://ckbir8jflpqsg" path="res://enemies/eye/eye_shot/eye_shot.tscn" id="7_0xd23"]
+[ext_resource type="Script" uid="uid://bxlnh6q22y4ux" path="res://enemies/eye/states/ram.gd" id="7_kyfx2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ah3cm"]
+
+[node name="Eye" type="CharacterBody2D"]
+collision_layer = 4
+script = ExtResource("1_ah3cm")
+
+[node name="CentralHandle" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_ayjj1")
+metadata/_custom_type_script = "uid://ck7si71yuaqjj"
+
+[node name="Sprite" type="Sprite2D" parent="CentralHandle"]
+texture_filter = 1
+texture = ExtResource("1_kyxgt")
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("CircleShape2D_ah3cm")
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("4_emk32")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("5_qp5oa")
+
+[node name="Follow" type="Node" parent="StateMachine"]
+script = ExtResource("6_vnqpf")
+bullet = ExtResource("7_0xd23")
+
+[node name="Ram" type="Node" parent="StateMachine"]
+script = ExtResource("7_kyfx2")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="Collider" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -1)
+shape = SubResource("CircleShape2D_ah3cm")
+
+[connection signal="area_entered" from="Hurtbox" to="." method="deal_damage"]

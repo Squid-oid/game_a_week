@@ -1,0 +1,165 @@
+[gd_scene load_steps=18 format=3 uid="uid://dw35m80pwgo1u"]
+
+[ext_resource type="Texture2D" uid="uid://b6wgg0gcs7uuj" path="res://assets/pew/shot_effect.png" id="1_vk1bi"]
+[ext_resource type="Script" uid="uid://7y5l7tnllp4b" path="res://player/main_elements/gun.gd" id="1_yknm8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7vd5q"]
+atlas = ExtResource("1_vk1bi")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pr6yj"]
+atlas = ExtResource("1_vk1bi")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k8v55"]
+atlas = ExtResource("1_vk1bi")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5k1dv"]
+atlas = ExtResource("1_vk1bi")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1q2t8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": null
+}],
+"loop": true,
+"name": &"nothing",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7vd5q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pr6yj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k8v55")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5k1dv")
+}],
+"loop": false,
+"name": &"pew",
+"speed": 12.0
+}]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cqdd6"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_r3ymx"]
+animation = &"pew"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_mepx8"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gsnsg"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_cuokk"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_13h63"]
+states/idle/node = SubResource("AnimationNodeAnimation_cqdd6")
+states/idle/position = Vector2(319, 100)
+states/pew/node = SubResource("AnimationNodeAnimation_r3ymx")
+states/pew/position = Vector2(460, 100)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_mepx8"), "pew", "idle", SubResource("AnimationNodeStateMachineTransition_gsnsg"), "idle", "pew", SubResource("AnimationNodeStateMachineTransition_cuokk")]
+
+[sub_resource type="Animation" id="Animation_r3ymx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_mepx8"]
+resource_name = "idle"
+length = 0.041670833
+step = 1.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"nothing"]
+}
+
+[sub_resource type="Animation" id="Animation_cqdd6"]
+resource_name = "pew"
+length = 0.16667084
+step = 0.041666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"pew"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.041666668, 0.08574078, 0.125),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mepx8"]
+_data = {
+&"RESET": SubResource("Animation_r3ymx"),
+&"idle": SubResource("Animation_mepx8"),
+&"pew": SubResource("Animation_cqdd6")
+}
+
+[node name="gun" type="Node2D"]
+script = ExtResource("1_yknm8")
+
+[node name="gun_sprite" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_1q2t8")
+animation = &"nothing"
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+root_node = NodePath("../gun_sprite")
+tree_root = SubResource("AnimationNodeStateMachine_13h63")
+anim_player = NodePath("../AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../gun_sprite")
+libraries = {
+&"": SubResource("AnimationLibrary_mepx8")
+}
+
+[node name="Hurtbox" type="RayCast2D" parent="."]
+position = Vector2(-4, -1)
+rotation = -1.5707964
+target_position = Vector2(0, 250)
+collision_mask = 7
+hit_from_inside = true
+collide_with_areas = true
