@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3 uid="uid://ds88wfla4pfh1"]
+
+[ext_resource type="PackedScene" uid="uid://b5guytyy41qsc" path="res://Menus/transitioner/transitioner.tscn" id="1_s8grl"]
+[ext_resource type="Script" uid="uid://b71hw5ixh7jga" path="res://Menus/settings/buttons.gd" id="2_s8grl"]
+
+[node name="Settings" type="Node2D"]
+
+[node name="Transitioner" parent="." instance=ExtResource("1_s8grl")]
+z_index = 2000
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Buttons" type="Control" parent="." node_paths=PackedStringArray("transitioner")]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -64.0
+offset_right = 32.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_s8grl")
+transitioner = NodePath("../Transitioner")
+
+[node name="MainMenu" type="Button" parent="Buttons"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -15.5
+offset_right = 50.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Main Menu"
+
+[node name="Quit" type="Button" parent="Buttons"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -21.0
+offset_top = -31.0
+offset_right = 21.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Quit"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[connection signal="pressed" from="Buttons/MainMenu" to="Buttons" method="_on_main_menu_pressed"]
+[connection signal="pressed" from="Buttons/Quit" to="Buttons" method="_on_quit_pressed"]

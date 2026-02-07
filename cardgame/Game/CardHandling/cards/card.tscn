@@ -1,0 +1,137 @@
+[gd_scene load_steps=5 format=3 uid="uid://cj7wvgm48v1t2"]
+
+[ext_resource type="Script" uid="uid://dtsknqlcxepbc" path="res://Game/CardHandling/cards/card.gd" id="1_vjrnk"]
+[ext_resource type="Script" uid="uid://7auxl5hb7t65" path="res://Game/CardHandling/cards/cost_bubbles.gd" id="2_l4s2f"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_vjrnk"]
+polygon = PackedVector2Array(-0.5, -0.5, -0.5, 39.5, 0, 39, 0, 0)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2go2b"]
+size = Vector2(56, 86)
+
+[node name="Card" type="Node2D"]
+script = ExtResource("1_vjrnk")
+
+[node name="GraphicalElements" type="Node2D" parent="."]
+
+[node name="OuterEdging" type="Line2D" parent="GraphicalElements"]
+position = Vector2(-25, -39)
+points = PackedVector2Array(0, 0, 50, 0, 50, 81, 0, 81)
+closed = true
+width = 5.5
+default_color = Color(0.09079821, 0.051850572, 0.011330159, 1)
+joint_mode = 2
+
+[node name="Edging" type="Line2D" parent="GraphicalElements"]
+position = Vector2(-25, -39)
+points = PackedVector2Array(0, 0, 50, 0, 50, 81, 0, 81)
+closed = true
+width = 5.0
+default_color = Color(0.24042468, 0.15981121, 0.059643883, 1)
+joint_mode = 2
+
+[node name="Inner" type="ColorRect" parent="GraphicalElements"]
+offset_left = -25.0
+offset_top = -38.0
+offset_right = 25.0
+offset_bottom = 43.0
+mouse_filter = 2
+color = Color(0.48044387, 0.49481577, 0.37984037, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="TextBackGround" type="ColorRect" parent="GraphicalElements"]
+offset_left = -22.5
+offset_top = 7.0
+offset_right = 22.5
+offset_bottom = 39.5
+mouse_filter = 2
+color = Color(0.96232605, 0.9765859, 0.8244802, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="TextEdging" type="Line2D" parent="GraphicalElements"]
+position = Vector2(-25, -39)
+points = PackedVector2Array(2.5, 46, 47.5, 46, 47.5, 78.5, 2.5, 78.5)
+closed = true
+width = 1.0
+default_color = Color(0.18392473, 0.17438284, 0.049701676, 1)
+joint_mode = 2
+
+[node name="ImageEdging" type="Line2D" parent="GraphicalElements"]
+position = Vector2(-25, -39)
+points = PackedVector2Array(2.5, 2.5, 47.5, 2.5, 47.5, 42.5, 2.5, 42.5)
+closed = true
+width = 1.0
+default_color = Color(0.18392473, 0.17438284, 0.049701676, 1)
+joint_mode = 2
+
+[node name="CardName" type="RichTextLabel" parent="GraphicalElements"]
+unique_name_in_owner = true
+offset_left = -21.0
+offset_top = 7.875
+offset_right = 859.0
+offset_bottom = 87.875
+scale = Vector2(0.04995626, 0.05)
+mouse_filter = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 64
+theme_override_font_sizes/bold_font_size = 64
+theme_override_font_sizes/bold_italics_font_size = 64
+theme_override_font_sizes/italics_font_size = 64
+theme_override_font_sizes/mono_font_size = 64
+text = "Card Name"
+scroll_active = false
+metadata/_edit_use_anchors_ = true
+
+[node name="InfoText" type="RichTextLabel" parent="GraphicalElements"]
+unique_name_in_owner = true
+offset_left = -22.0
+offset_top = 10.0
+offset_right = 858.0
+offset_bottom = 600.0
+scale = Vector2(0.04939623, 0.05027588)
+mouse_filter = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 64
+theme_override_font_sizes/bold_font_size = 64
+theme_override_font_sizes/bold_italics_font_size = 64
+theme_override_font_sizes/italics_font_size = 64
+theme_override_font_sizes/mono_font_size = 64
+text = "This is the placeholder text"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="ImageHolder" type="Polygon2D" parent="GraphicalElements"]
+unique_name_in_owner = true
+position = Vector2(-22, -36)
+scale = Vector2(0.25, 0.25)
+polygon = PackedVector2Array(0, 0, 176, 0, 176, 156, 0, 156)
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="GraphicalElements"]
+position = Vector2(-22, -36)
+occluder = SubResource("OccluderPolygon2D_vjrnk")
+
+[node name="CostBubbles" type="Node2D" parent="GraphicalElements"]
+unique_name_in_owner = true
+position = Vector2(-24, -40)
+script = ExtResource("2_l4s2f")
+
+[node name="Collsion" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collsion"]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_2go2b")
+
+[node name="ClickDetector" type="Button" parent="."]
+light_mask = 0
+visibility_layer = 0
+offset_left = -28.0
+offset_top = -42.0
+offset_right = 28.0
+offset_bottom = 44.0
+flat = true
+
+[connection signal="mouse_entered" from="ClickDetector" to="." method="_set_hovered"]
+[connection signal="mouse_exited" from="ClickDetector" to="." method="_release_hovered"]
+[connection signal="pressed" from="ClickDetector" to="." method="_on_click_detector_pressed"]

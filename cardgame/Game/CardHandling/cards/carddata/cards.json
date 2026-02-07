@@ -1,0 +1,3 @@
+{"card_gfx":"GraphicalElements:<Node2D#217382390592>","cost":1.0,"desc":"Deal 3 Damage To Target Enemy","func":"Damage(3)","image_path":"res://Assets/DummyImage.png","name":"Fireball","target_type":"Enemy","type":"spell"}
+{"card_gfx":"GraphicalElements:<Node2D#242699209858>","cost":2.0,"desc":"Health: 1, Damage: 1","func":"[1,1]","image_path":"res://Assets/icon.svg","name":"Minion of Evil","target_type":"","type":"monster"}
+{"card_gfx":"GraphicalElements:<Node2D#262714428730>","cost":5.0,"desc":"This card kills you","func":"[2,2]","image_path":"res://Assets/car.png","name":"Mechanical Menace","target_type":"Self","type":"monster"}

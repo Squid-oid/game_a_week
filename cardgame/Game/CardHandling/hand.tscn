@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqonjhbw51wby"]
+
+[ext_resource type="Script" uid="uid://bhswcghc5y7i7" path="res://Game/CardHandling/hand.gd" id="1_045vw"]
+
+[sub_resource type="Curve2D" id="Curve2D_eviqq"]
+_data = {
+"points": PackedVector2Array(-94.0152, 53.830273, 80, -50, -200, 50, 0, 0, 0, 0, 0, 0, -80, -50, 0, 0, 200, 50)
+}
+point_count = 3
+
+[node name="Hand" type="Path2D"]
+curve = SubResource("Curve2D_eviqq")
+script = ExtResource("1_045vw")

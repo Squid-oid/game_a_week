@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://cs4gbl4rfnyuc"]
+
+[ext_resource type="Script" uid="uid://cvpoxbwxbacsv" path="res://Game/game.gd" id="1_jcm6v"]
+[ext_resource type="Script" uid="uid://b47yor24xfqeg" path="res://Game/card_spawner.gd" id="2_1r4le"]
+[ext_resource type="PackedScene" uid="uid://bqonjhbw51wby" path="res://Game/CardHandling/hand.tscn" id="2_7raqb"]
+[ext_resource type="PackedScene" uid="uid://cu0ufwlrugv87" path="res://Game/CardHandling/side.tscn" id="3_7raqb"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_jcm6v")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Hand" parent="." node_paths=PackedStringArray("game") instance=ExtResource("2_7raqb")]
+position = Vector2(0, 320)
+scale = Vector2(3.8400016, 3.8400016)
+game = NodePath("..")
+
+[node name="CardSpawner" type="Node" parent="."]
+script = ExtResource("2_1r4le")
+
+[node name="Button" type="Button" parent="CardSpawner"]
+offset_left = 656.0
+offset_top = 176.0
+offset_right = 848.0
+offset_bottom = 344.0
+text = "Spawn Card"
+
+[node name="Side" parent="." instance=ExtResource("3_7raqb")]
+position = Vector2(0, -160)
+scale = Vector2(2, 2)
+
+[connection signal="pressed" from="CardSpawner/Button" to="CardSpawner" method="_on_button_pressed"]
